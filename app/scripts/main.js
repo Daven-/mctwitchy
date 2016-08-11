@@ -1,16 +1,54 @@
+var streamers = ['ESL_SC2', 'OgamingSC2', 'cretetion', 'freecodecamp', 'storbeck', 'habathcx', 'RobotCaleb', 'noobs2ninjas'];
+var offline = [];
+var online = [];
 $(document).ready(function() {
-  var streamers = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+
 
   for (var i = 0; i < streamers.length; i++) {
-    $.getJSON("https://api.twitch.tv/kraken/streams/"+streamers[i]+"?callback=?", function(data) {
-      console.log(data);
-      $(".cards").append(createCard(data.stream));
+    $.getJSON('https://api.twitch.tv/kraken/streams/'+streamers[i]+'?callback=?', function(data) {
+      //console.log(data);
+      if(data.stream == null){
+        $.getJSON(data._links.channel, function(data) {
+          //console.log(data);
+          $('.offline').append(createCardOffline(data));
+        });
+
+      }else{
+        //console.log(data);
+        $('.online').append(createCardOnline(data.stream));
+      }
     });
+
   }
 
 });
 
-function createCard(stream){
+
+function createCardOffline(channel){
+  var status = channel.status != null ? channel.status : 'No Status';
+  var url = channel.url;
+  var name = channel.name;
+  var img = channel.logo;
+
+  var card = '<div class=\'card horizontal hoverable \'>' +
+      '<div class=\'card-image\'>'+
+        '<a target=\'_blank\' href=\''+url+'\'><img style="width: 320px; height: 180px;" src=\''+img+'\'></a>' +
+      '</div>'+
+      '<div class=\'card-stacked\'>'+
+        '<div class=\'card-content\'>'+
+          '<p>'+status+'</p>'+
+          '<br>'+
+          '<div class=\'chip btn-warning\'>Offline</div>'+
+        '</div>'+
+        '<div class=\'card-action\'>'+
+          '<a target=\'_blank\' href=\''+url+'\'>'+name+'</a>'+
+        '</div>'+
+      '</div>';
+  return card;
+}
+
+
+function createCardOnline(stream){
   var game = stream.game;
   var viewers = stream.viewers;
 
@@ -27,23 +65,24 @@ function createCard(stream){
   var preview = stream.preview;
   var img = preview.medium;
 
-  var card = "<div class='card horizontal hoverable '>" +
-      "<div class='card-image'>"+
-        "<a target='_blank' href='"+url+"'><img src='"+img+"'></a>" +
-      "</div>"+
-      "<div class='card-stacked'>"+
-        "<div class='card-content'>"+
-          "<p>"+status+"</p>"+
-          "<br>"+
-          "<div class='chip'>Game: "+game+"</div>"+
-          "<div class='chip'>Language: "+lg+"</div>"+
-          "<div class='chip'>views: "+views+"</div>"+
-          "<div class='chip'>Followers: "+followers+"</div>"+
-          "<div class='chip'>Partner: "+partner+"</div>"+
-        "</div>"+
-        "<div class='card-action'>"+
-          "<a target='_blank' href='"+url+"'>"+name+"</a>"+
-        "</div>"+
-      "</div>";
+  var card = '<div class=\'card horizontal hoverable \'>' +
+      '<div class=\'card-image\'>'+
+        '<a target=\'_blank\' href=\''+url+'\'><img src=\''+img+'\'></a>' +
+      '</div>'+
+      '<div class=\'card-stacked\'>'+
+        '<div class=\'card-content\'>'+
+          '<p>'+status+'</p>'+
+          '<br>'+
+          '<div class=\'chip\'>Game: '+game+'</div>'+
+          '<div class=\'chip\'>Language: '+lg+'</div>'+
+          '<div class=\'chip\'>Viewers: '+viewers+'</div>'+
+          '<div class=\'chip\'>Followers: '+followers+'</div>'+
+          '<div class=\'chip\'>Lifetime Views: '+views+'</div>'+
+
+        '</div>'+
+        '<div class=\'card-action\'>'+
+          '<a target=\'_blank\' href=\''+url+'\'>'+name+'</a>'+
+        '</div>'+
+      '</div>';
   return card;
 }
