@@ -18,8 +18,27 @@ $(document).ready(function() {
         $('.online').append(createCardOnline(data.stream));
       }
     });
-
   }
+
+  $('#test5').click(function(e){
+    var target = e.target;
+    console.log(target.checked);
+    if(target.checked){
+      $('.online').attr('hidden', null);
+    }else{
+      $('.online').attr('hidden', 'true');
+    }
+  });
+
+  $('#test6').click(function(e){
+    var target = e.target;
+    console.log(target.checked);
+    if(target.checked){
+      $('.offline').attr('hidden', null);
+    }else{
+      $('.offline').attr('hidden', 'true');
+    }
+  });
 
 });
 
@@ -73,11 +92,11 @@ function createCardOnline(stream){
         '<div class=\'card-content\'>'+
           '<p>'+status+'</p>'+
           '<br>'+
-          '<div class=\'chip\'>Game: '+game+'</div>'+
-          '<div class=\'chip\'>Language: '+lg+'</div>'+
-          '<div class=\'chip\'>Viewers: '+viewers+'</div>'+
-          '<div class=\'chip\'>Followers: '+followers+'</div>'+
-          '<div class=\'chip\'>Lifetime Views: '+views+'</div>'+
+          '<div class=\'chip btn-warning\'>Game: '+game+'</div>'+
+          '<div class=\'chip btn-warning\'>Language: '+lg+'</div>'+
+          '<div class=\'chip btn-warning\'>Viewers: '+viewers+'</div>'+
+          '<div class=\'chip btn-warning\'>Followers: '+followers+'</div>'+
+          '<div class=\'chip btn-warning\'>Lifetime Views: '+views+'</div>'+
 
         '</div>'+
         '<div class=\'card-action\'>'+
